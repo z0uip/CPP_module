@@ -20,14 +20,11 @@ int main(int ac, char **av)
 	}
 	std::map<std::string, double> db = getMap(datafile);
 	std::string line;
+	std::getline(file, line);
 	while (std::getline(file, line))
 	{
-		if (!is_parsed(line, &info))
-			continue;
-		else
-		{
+		if (is_parsed(line, info))
 			getResult(info, db);
-		}
 	}
 	return (1);
 }

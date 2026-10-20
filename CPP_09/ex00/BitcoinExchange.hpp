@@ -7,10 +7,6 @@
 #include <sstream>
 #include <map>
 
-bool is_parsed(std::string line, Info &info);
-std::map<std::string, double> getMap(std::ifstream &datafile);
-void getResult(Info &info, std::map<std::string, double> &db);
-
 class Info
 {
 	private :
@@ -22,5 +18,11 @@ class Info
 		void setDate(std::string date);
 		void setValue(double value);
 };
+
+
+bool is_parsed(std::string line, Info &info);
+std::map<std::string, double> getMap(std::ifstream &datafile);
+void getResult(Info &info, std::map<std::string, double> &db);
+bool checkDate(std::string date);
 
 #endif
