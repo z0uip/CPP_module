@@ -11,9 +11,23 @@ int main(int ac, char **av)
 		std::cerr << "Error: could not open file." << std::endl;
 		return (1);
 	}
+	Info info;
+	std::ifstream datafile("data.csv");
+	if (!file.is_open())
+	{
+		std::cerr << "Error: could not open the data base." << std::endl;
+		return (1);
+	}
+	std::map<std::string, double> db = getMap(datafile);
 	std::string line;
 	while (std::getline(file, line))
 	{
-		/*fontion de parsing si retourne false break;*/
+		if (!is_parsed(line, &info))
+			continue;
+		else
+		{
+			getResult(info, db);
+		}
 	}
+	return (1);
 }
