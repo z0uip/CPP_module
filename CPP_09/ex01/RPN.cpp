@@ -1,12 +1,50 @@
 #include "RPN.hpp"
 
-void execOpe(std::string line)
+bool Ope::execute(const std::string &line)
 {
-	size_t i = 0;
-	while (line[i])
-	{
+	std::istringstream	iss(line);
+	std::string			token;
 
+	while (!_digit.empty())
+		_digit.pop();
+
+	while (iss >> token)
+	{
+		if (token.size() != 1)
+			return (error());
+		char c = token[0];
+
+		if (std::isdigit(static_cast<unsigned char>(c)))
+			_digit.push(c - '0');
+		else if (c == '+' || c == '-' || c == '*' || c == '/')
+		{
+			if (_digit.size() < 2)
+				return (error());
+			long b = _digit.top();
+			_digit.pop();
+			long a = _digit.top();
+			_digit.pop();
+
+			if (c == '+')
+				_digit.push(a + b);
+			else if (c == '-')
+				_digit.push(a - b);
+			else if (c == '*')
+				_digit.push(a * b);
+			else
+			{
+				if (b == 0)
+					return (error());
+				_digit.push(a / b);
+			}
+		}
+		else
+			return (error());
 	}
+	if (_digit.size() != 1)
+		return (error());
+	std::cout << _digit.top() << std::endl;
+	return (true);
 }
 
 bool parsing(const std::string &line)
@@ -21,7 +59,6 @@ bool parsing(const std::string &line)
 		if (i == line.size())
 			break ;
 		char c = line[i];
-		// un token fait 1 caractère : il doit être suivi d'un espace ou de la fin
 		if (i + 1 < line.size() && !std::isspace(static_cast<unsigned char>(line[i + 1])))
 			return false;
 		if (std::isdigit(static_cast<unsigned char>(c)))
@@ -54,4 +91,29 @@ int Ope::getDigit()
 size_t Ope::size() const
 {
 	return _digit.size();
+}
+
+bool Ope::error() const
+{
+	std::cerr << "Error" << std::endl;
+	return (false);
+}
+
+Ope::Ope()
+{
+}
+
+Ope::Ope(const Ope &other) : _digit(other._digit)
+{
+}
+
+Ope &Ope::operator=(const Ope &other)
+{
+	if (this != &other)
+		_digit = other._digit;
+	return (*this);
+}
+
+Ope::~Ope()
+{
 }

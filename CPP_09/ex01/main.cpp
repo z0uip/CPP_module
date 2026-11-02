@@ -1,12 +1,14 @@
 #include "RPN.hpp"
 
-int main (int ac, char **av)
+int main(int ac, char **av)
 {
-	std::string line = av[1];
-	if (ac >= 16)
-		return (std::cout << "Error: too much number" << std::endl, 1);
-	if (parsing(line))
-		std::cout << "c'est tout bon" << std::endl;
-	else
-		std::cout << "pas bon" << std::endl;
+	if (ac != 2)
+	{
+		std::cerr << "Error" << std::endl;
+		return (1);
+	}
+	Ope ope;
+	if (!ope.execute(av[1]))
+		return (1);
+	return (0);
 }
